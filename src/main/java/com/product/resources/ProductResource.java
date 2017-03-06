@@ -2,8 +2,8 @@ package com.product.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.product.core.Product;
-import com.product.db.ProductDAO;
-import com.scottescue.dropwizard.entitymanager.UnitOfWork;
+import com.product.db.ProductRepository;
+import com.product.service.ProductService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,17 +15,17 @@ import java.util.List;
 @Path("/product")
 public class ProductResource {
 
-    ProductDAO productDAO;
+    ProductService productService;
 
-    public ProductResource(ProductDAO dao) {
-        productDAO = dao;
+    public ProductResource(ProductService productService) {
+        this.productService = productService;
     }
 
     @GET
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     public List<Product> getProduct() {
-        return productDAO.findAll();
+        return productService.findAll();
     }
 
     @POST
@@ -33,6 +33,6 @@ public class ProductResource {
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.APPLICATION_JSON)
     public void createProduct(@FormParam("name") String name){
-        productDAO.create(new Product(name));
+        productService.create(new Product(name));
     }
 }

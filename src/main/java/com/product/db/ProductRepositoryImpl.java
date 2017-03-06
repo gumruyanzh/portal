@@ -9,20 +9,22 @@ import java.util.List;
 /**
  * Created by TCE\zhirayrg on 3/3/17.
  */
-public class ProductDAO {
+public class ProductRepositoryImpl implements ProductRepository {
 
     private EntityManager em;
 
-    public ProductDAO(EntityManager em) {
-        this.em=em;
+    public ProductRepositoryImpl(EntityManager em) {
+        this.em = em;
     }
 
     @UnitOfWork(transactional = false)
-    Product findById(Long id){
+    @Override
+    public Product findById(Long id) {
         return em.find(Product.class, id);
     }
 
     @UnitOfWork
+    @Override
     public long create(Product product) {
         em.persist(product);
         em.flush();
@@ -31,6 +33,7 @@ public class ProductDAO {
 
 
     @UnitOfWork(transactional = false)
+    @Override
     public List<Product> findAll() {
         return em.createQuery("select p from Product p").getResultList();
     }

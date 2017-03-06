@@ -1,9 +1,10 @@
 package com.product;
 
-import com.product.db.ProductDAO;
+import com.product.db.ProductRepositoryImpl;
 import com.product.db.UserDAO;
 import com.product.resources.ProductResource;
 import com.product.resources.UserResource;
+import com.product.service.ProductServiceImpl;
 import com.scottescue.dropwizard.entitymanager.EntityManagerBundle;
 import com.scottescue.dropwizard.entitymanager.ScanningEntityManagerBundle;
 import com.scottescue.dropwizard.entitymanager.UnitOfWorkAwareProxyFactory;
@@ -54,8 +55,8 @@ public class PortalApplication extends Application<PortalConfiguration> {
 
         UnitOfWorkAwareProxyFactory proxyFactory = new UnitOfWorkAwareProxyFactory(entityManagerBundle);
 
-        ProductDAO productDao = proxyFactory.create(
-                ProductDAO.class,
+        ProductRepositoryImpl productRepository = proxyFactory.create(
+                ProductRepositoryImpl.class,
                 EntityManager.class,
                 entityManagerBundle.getSharedEntityManager());
 
@@ -67,7 +68,7 @@ public class PortalApplication extends Application<PortalConfiguration> {
 
 
         environment.jersey().register(new UserResource(userDao));
-        environment.jersey().register(new ProductResource(productDao));
+        environment.jersey().register(new ProductResource(new ProductServiceImpl(productRepository)));
 
 
 
