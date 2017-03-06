@@ -41,12 +41,12 @@
             <artifactId>dropwizard-core</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.dropwizard/dropwizard-hibernate -->
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-hibernate</artifactId>
-            <version>1.0.6</version>
+            <groupId>com.scottescue</groupId>
+            <artifactId>dropwizard-entitymanager</artifactId>
+            <version>1.0.0-1</version>
         </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>

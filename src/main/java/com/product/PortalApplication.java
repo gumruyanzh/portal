@@ -1,26 +1,38 @@
 package com.product;
 
-import com.product.core.Product;
 import com.product.db.ProductDAO;
+import com.product.db.UserDAO;
 import com.product.resources.ProductResource;
 import com.product.resources.UserResource;
-import com.product.core.User;
-import com.product.db.UserDAO;
+import com.scottescue.dropwizard.entitymanager.EntityManagerBundle;
+import com.scottescue.dropwizard.entitymanager.ScanningEntityManagerBundle;
+import com.scottescue.dropwizard.entitymanager.UnitOfWorkAwareProxyFactory;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+
+import javax.persistence.EntityManager;
 
 public class PortalApplication extends Application<PortalConfiguration> {
 
 
-    private final HibernateBundle<PortalConfiguration> hibernate = new HibernateBundle<PortalConfiguration>(User.class, Product.class) {
-        @Override
-        public DataSourceFactory getDataSourceFactory(PortalConfiguration configuration) {
-            return configuration.getDataSourceFactory();
-        }
-    };
+//    private final HibernateBundle<PortalConfiguration> hibernate = new ScanningHibernateBundle<PortalConfiguration>("com.product.core") {
+//        @Override
+//        public DataSourceFactory getDataSourceFactory(PortalConfiguration configuration) {
+//            return configuration.getDataSourceFactory();
+//        }
+//    };
+
+
+    private final EntityManagerBundle<PortalConfiguration> entityManagerBundle =
+            new ScanningEntityManagerBundle<PortalConfiguration>("com.product") {
+                @Override
+                public DataSourceFactory getDataSourceFactory(PortalConfiguration configuration) {
+                    return configuration.getDataSourceFactory();
+                }
+            };
+
 
     public static void main(final String[] args) throws Exception {
         new PortalApplication().run(args);
@@ -33,18 +45,30 @@ public class PortalApplication extends Application<PortalConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<PortalConfiguration> bootstrap) {
-        bootstrap.addBundle(hibernate);
+        bootstrap.addBundle(entityManagerBundle);
     }
 
     @Override
     public void run(final PortalConfiguration configuration,
                     final Environment environment) {
 
-        final UserDAO dao = new UserDAO(hibernate.getSessionFactory());
-        final ProductDAO dao2 = new ProductDAO(hibernate.getSessionFactory());
+        UnitOfWorkAwareProxyFactory proxyFactory = new UnitOfWorkAwareProxyFactory(entityManagerBundle);
 
-        environment.jersey().register(new UserResource(dao));
-        environment.jersey().register(new ProductResource(dao2));
+        ProductDAO productDao = proxyFactory.create(
+                ProductDAO.class,
+                EntityManager.class,
+                entityManagerBundle.getSharedEntityManager());
+
+        UserDAO userDao = proxyFactory.create(
+                UserDAO.class,
+                EntityManager.class,
+                entityManagerBundle.getSharedEntityManager());
+
+
+
+        environment.jersey().register(new UserResource(userDao));
+        environment.jersey().register(new ProductResource(productDao));
+
 
 
     }

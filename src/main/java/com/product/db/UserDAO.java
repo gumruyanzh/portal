@@ -1,31 +1,39 @@
 package com.product.db;
 
 import com.product.core.User;
-import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.SessionFactory;
+import com.scottescue.dropwizard.entitymanager.UnitOfWork;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
  * Created by TCE\zhirayrg on 3/3/17.
  */
-public class UserDAO extends AbstractDAO<User> {
+public class UserDAO {
 
+    EntityManager em;
 
-    public UserDAO(SessionFactory factory) {
-        super(factory);
+    public UserDAO(EntityManager em) {
+        this.em=em;
     }
 
+    @UnitOfWork(transactional = false)
     public User findById(Long id) {
-        return get(id);
+
+        return em.find(User.class, id);
     }
 
+    @UnitOfWork
     public long create(User user) {
-        return persist(user).getId();
+
+        em.persist(user);
+        em.flush();
+        return user.getId();
     }
 
+    @UnitOfWork(transactional = false)
     public List<User> findAll() {
-        return list(namedQuery("com.example.helloworld.core.Product.findAll"));
+        return em.createQuery("select u from User u").getResultList();
     }
 
 

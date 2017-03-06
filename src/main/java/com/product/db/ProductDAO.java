@@ -1,23 +1,37 @@
 package com.product.db;
 
 import com.product.core.Product;
-import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.SessionFactory;
+import com.scottescue.dropwizard.entitymanager.UnitOfWork;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Created by TCE\zhirayrg on 3/3/17.
  */
-public class ProductDAO extends AbstractDAO<Product> {
+public class ProductDAO {
 
-    public ProductDAO(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    private EntityManager em;
+
+    public ProductDAO(EntityManager em) {
+        this.em=em;
     }
 
+    @UnitOfWork(transactional = false)
     Product findById(Long id){
-        return get(id);
+        return em.find(Product.class, id);
     }
 
-    public Product create(Product product) {
-        return persist(product);
+    @UnitOfWork
+    public long create(Product product) {
+        em.persist(product);
+        em.flush();
+        return product.getId();
+    }
+
+
+    @UnitOfWork(transactional = false)
+    public List<Product> findAll() {
+        return em.createQuery("select p from Product p").getResultList();
     }
 }
