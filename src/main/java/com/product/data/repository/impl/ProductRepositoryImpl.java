@@ -39,6 +39,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         return em.createQuery("select p from Product p").getResultList();
     }
 
+    @UnitOfWork(transactional = false)
     @Override
     public List<Product> findProductsByCategory(Category category) {
         Long categoryId = category.getId();

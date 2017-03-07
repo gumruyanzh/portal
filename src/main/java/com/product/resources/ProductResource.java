@@ -2,6 +2,7 @@ package com.product.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.product.data.entity.Product;
+import com.product.resources.model.ProductCreateModel;
 import com.product.service.ProductService;
 import com.product.service.dto.ProductCreateDto;
 import com.product.service.dto.ProductSimpleDto;
@@ -31,10 +32,13 @@ public class ProductResource {
 
     @POST
     @Timed
-    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ProductSimpleDto createProduct(@FormParam("name") String name){
-        return productService.create(new ProductCreateDto(name));
+    public ProductSimpleDto createProduct(ProductCreateModel producModel){
+        ProductCreateDto productCreateDto = new ProductCreateDto();
+        productCreateDto.setName(producModel.getName());
+        productCreateDto.setCategoryId(producModel.getCategoryId());
+        return productService.create(productCreateDto);
     }
 
 

@@ -1,6 +1,7 @@
 package com.product.data.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by TCE\zhirayrg on 3/3/17.

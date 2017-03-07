@@ -3,8 +3,10 @@ package com.product;
 import com.product.data.repository.impl.CategoryRepositoryImpl;
 import com.product.data.repository.impl.ProductRepositoryImpl;
 import com.product.data.repository.UserDAO;
+import com.product.resources.CategoryResource;
 import com.product.resources.ProductResource;
 import com.product.resources.UserResource;
+import com.product.service.impl.CategoryServiceImpl;
 import com.product.service.impl.ProductServiceImpl;
 import com.scottescue.dropwizard.entitymanager.EntityManagerBundle;
 import com.scottescue.dropwizard.entitymanager.ScanningEntityManagerBundle;
@@ -74,10 +76,19 @@ public class PortalApplication extends Application<PortalConfiguration> {
 
 
         environment.jersey().register(new UserResource(userDao));
-        environment.jersey().register(new ProductResource(new ProductServiceImpl(productRepository, categoryRepository)));
+        environment.jersey().register(new ProductResource(getProductService(productRepository, categoryRepository)));
+        environment.jersey().register(new CategoryResource(getCategoryService(categoryRepository), getProductService(productRepository, categoryRepository)));
 
 
 
+    }
+
+    private CategoryServiceImpl getCategoryService(CategoryRepositoryImpl categoryRepository) {
+        return new CategoryServiceImpl(categoryRepository);
+    }
+
+    private ProductServiceImpl getProductService(ProductRepositoryImpl productRepository, CategoryRepositoryImpl categoryRepository) {
+        return new ProductServiceImpl(productRepository, categoryRepository);
     }
 
 }

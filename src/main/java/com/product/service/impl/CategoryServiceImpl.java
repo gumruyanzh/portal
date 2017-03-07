@@ -28,7 +28,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategorySimpleDto create(CategoryCreateDto categoryCreateDto) {
-        Category category = new Category(categoryCreateDto.getName());
+        Category category = new Category();
+        category.setName(categoryCreateDto.getName());
         Category createdCategory = categoryRepository.create(category);
         return CategoryConverter.convertToDto(createdCategory);
     }

@@ -1,6 +1,7 @@
 package com.product.data.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by zhirayrg on 3/6/2017.
@@ -21,7 +22,7 @@ public class Category {
     public Category(){}
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-    private Product product;
+    private List<Product> product;
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> product) {
+        this.product = product;
     }
 }

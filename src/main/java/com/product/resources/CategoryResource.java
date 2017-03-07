@@ -1,8 +1,7 @@
 package com.product.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.product.data.entity.Category;
-import com.product.data.entity.Product;
+import com.product.resources.model.CategoryCreateModel;
 import com.product.service.CategoryService;
 import com.product.service.ProductService;
 import com.product.service.dto.CategoryCreateDto;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * Created by zhirayrg on 3/6/2017.
  */
-@Path("/categorys")
+@Path("/categories")
 public class CategoryResource {
 
     private final CategoryService categoryService;
@@ -36,10 +35,12 @@ public class CategoryResource {
 
     @POST
     @Timed
-    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public CategorySimpleDto createCategory(@FormParam("name") String name){
-        return categoryService.create(new CategoryCreateDto(name));
+    public CategorySimpleDto createCategory( CategoryCreateModel categoryCreateModel){
+        CategoryCreateDto categoryCreateDto = new CategoryCreateDto();
+        categoryCreateDto.setName(categoryCreateModel.getName());
+        return categoryService.create(categoryCreateDto);
     }
 
     @GET
