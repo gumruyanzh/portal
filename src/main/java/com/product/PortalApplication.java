@@ -1,5 +1,6 @@
 package com.product;
 
+import com.product.data.repository.impl.CategoryRepositoryImpl;
 import com.product.data.repository.impl.ProductRepositoryImpl;
 import com.product.data.repository.UserDAO;
 import com.product.resources.ProductResource;
@@ -60,6 +61,11 @@ public class PortalApplication extends Application<PortalConfiguration> {
                 EntityManager.class,
                 entityManagerBundle.getSharedEntityManager());
 
+        CategoryRepositoryImpl categoryRepository = proxyFactory.create(
+                CategoryRepositoryImpl.class,
+                EntityManager.class,
+                entityManagerBundle.getSharedEntityManager());
+
         UserDAO userDao = proxyFactory.create(
                 UserDAO.class,
                 EntityManager.class,
@@ -68,7 +74,7 @@ public class PortalApplication extends Application<PortalConfiguration> {
 
 
         environment.jersey().register(new UserResource(userDao));
-        environment.jersey().register(new ProductResource(new ProductServiceImpl(productRepository)));
+        environment.jersey().register(new ProductResource(new ProductServiceImpl(productRepository, categoryRepository)));
 
 
 
