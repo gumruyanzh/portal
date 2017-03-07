@@ -1,10 +1,10 @@
 package com.product;
 
-import com.product.db.ProductRepositoryImpl;
-import com.product.db.UserDAO;
+import com.product.data.repository.impl.ProductRepositoryImpl;
+import com.product.data.repository.UserDAO;
 import com.product.resources.ProductResource;
 import com.product.resources.UserResource;
-import com.product.service.ProductServiceImpl;
+import com.product.service.impl.ProductServiceImpl;
 import com.scottescue.dropwizard.entitymanager.EntityManagerBundle;
 import com.scottescue.dropwizard.entitymanager.ScanningEntityManagerBundle;
 import com.scottescue.dropwizard.entitymanager.UnitOfWorkAwareProxyFactory;
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
 public class PortalApplication extends Application<PortalConfiguration> {
 
 
-//    private final HibernateBundle<PortalConfiguration> hibernate = new ScanningHibernateBundle<PortalConfiguration>("com.product.core") {
+//    private final HibernateBundle<PortalConfiguration> hibernate = new ScanningHibernateBundle<PortalConfiguration>("com.product.data.entity") {
 //        @Override
 //        public DataSourceFactory getDataSourceFactory(PortalConfiguration configuration) {
 //            return configuration.getDataSourceFactory();

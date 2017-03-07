@@ -1,6 +1,6 @@
-package com.product.db;
+package com.product.data.repository;
 
-import com.product.core.User;
+import com.product.data.entity.User;
 import com.scottescue.dropwizard.entitymanager.UnitOfWork;
 
 import javax.persistence.EntityManager;

@@ -1,9 +1,10 @@
 package com.product.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.product.core.Product;
-import com.product.db.ProductRepository;
+import com.product.data.entity.Product;
 import com.product.service.ProductService;
+import com.product.service.dto.ProductCreateDto;
+import com.product.service.dto.ProductSimpleDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,10 +13,10 @@ import java.util.List;
 /**
  * Created by TCE\zhirayrg on 3/3/17.
  */
-@Path("/product")
+@Path("/products")
 public class ProductResource {
 
-    ProductService productService;
+    private final ProductService productService;
 
     public ProductResource(ProductService productService) {
         this.productService = productService;
@@ -24,7 +25,7 @@ public class ProductResource {
     @GET
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Product> getProduct() {
+    public List<ProductSimpleDto> getProduct() {
         return productService.findAll();
     }
 
@@ -32,7 +33,9 @@ public class ProductResource {
     @Timed
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createProduct(@FormParam("name") String name){
-        productService.create(new Product(name));
+    public ProductSimpleDto createProduct(@FormParam("name") String name){
+        return productService.create(new ProductCreateDto(name));
     }
+
+
 }

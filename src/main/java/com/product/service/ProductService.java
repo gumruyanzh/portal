@@ -1,6 +1,9 @@
 package com.product.service;
 
-import com.product.core.Product;
+import com.product.data.entity.Category;
+import com.product.data.entity.Product;
+import com.product.service.dto.ProductCreateDto;
+import com.product.service.dto.ProductSimpleDto;
 
 import java.util.List;
 
@@ -9,9 +12,12 @@ import java.util.List;
  */
 public interface ProductService {
 
-    Product findById(Long id);
+    ProductSimpleDto findById(Long id);
 
-    long create(Product product);
+    ProductSimpleDto create(ProductCreateDto productCreateDto);
 
-    List<Product> findAll();
+    List<ProductSimpleDto> findAll();
+
+    List<ProductSimpleDto> findProductsByCategoryId(Long categoryId);
+
 }

@@ -1,4 +1,4 @@
-package com.product.core;
+package com.product.data.entity;
 
 import java.security.Principal;
 import java.util.Set;

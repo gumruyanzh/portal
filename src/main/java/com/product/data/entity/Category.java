@@ -1,26 +1,30 @@
-package com.product.core;
+package com.product.data.entity;
 
 import javax.persistence.*;
 
 /**
- * Created by TCE\zhirayrg on 3/3/17.
+ * Created by zhirayrg on 3/6/2017.
  */
-
 @Entity
-@Table(name = "product")
-public class Product {
-
-
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
 
-    public Product() {}
+    public Category(String name) {
+        this.name = name;
+    }
+    public Category(){}
 
-    public Product(String name) {
-        this.name=name;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    private Product product;
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
@@ -33,9 +37,5 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

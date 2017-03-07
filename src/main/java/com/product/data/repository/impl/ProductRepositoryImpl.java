@@ -1,6 +1,8 @@
-package com.product.db;
+package com.product.data.repository.impl;
 
-import com.product.core.Product;
+import com.product.data.entity.Category;
+import com.product.data.repository.ProductRepository;
+import com.product.data.entity.Product;
 import com.scottescue.dropwizard.entitymanager.UnitOfWork;
 
 import javax.persistence.EntityManager;
@@ -25,10 +27,9 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @UnitOfWork
     @Override
-    public long create(Product product) {
+    public Product create(Product product) {
         em.persist(product);
-        em.flush();
-        return product.getId();
+        return product;
     }
 
 
@@ -36,5 +37,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<Product> findAll() {
         return em.createQuery("select p from Product p").getResultList();
+    }
+
+    @Override
+    public List<Product> findProductsByCategory(Category category) {
+        Long categoryId = category.getId();
+        return em.createQuery("select p from Product p where p.category_id := categoryId").getResultList();
     }
 }
