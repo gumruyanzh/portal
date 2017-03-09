@@ -20,4 +20,6 @@ public interface ProductService {
 
     List<ProductSimpleDto> findProductsByCategoryId(Long categoryId);
 
+    List<ProductSimpleDto> findProductsByTagId(Long tagId);
+
 }

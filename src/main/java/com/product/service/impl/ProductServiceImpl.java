@@ -2,15 +2,21 @@ package com.product.service.impl;
 
 import com.product.data.entity.Category;
 import com.product.data.entity.Product;
+import com.product.data.entity.Tag;
 import com.product.data.repository.CategoryRepository;
 import com.product.data.repository.ProductRepository;
+import com.product.data.repository.TagRepository;
 import com.product.service.ProductService;
 import com.product.service.dto.ProductCreateDto;
 import com.product.service.dto.ProductSimpleDto;
 import com.product.util.ProductConverter;
+import com.product.util.TagConverter;
+import javaslang.control.Option;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -20,10 +26,14 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
-        this.productRepository=productRepository;
-        this.categoryRepository=categoryRepository;
+    public ProductServiceImpl(ProductRepository productRepository,
+                              CategoryRepository categoryRepository,
+                              TagRepository tagRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.tagRepository = tagRepository;
     }
 
 
@@ -36,10 +46,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductSimpleDto create(ProductCreateDto productCreateDto) {
         Category category = categoryRepository.findById(productCreateDto.getCategoryId());
-
         Product product = new Product();
         product.setName(productCreateDto.getName());
         product.setCategory(category);
+
+        List<Tag> tags = new ArrayList<>();
+        Option.ofOptional(productCreateDto.getTagIds()).get()
+                .forEach(tagId->{
+                    Tag tag = tagRepository.findById(tagId);
+            tags.add(tag);
+        });
+
+        product.setTags(tags);
 
         Product createdProduct = productRepository.create(product);
 
@@ -57,11 +75,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductSimpleDto> findProductsByCategoryId(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId);
-        List<Product> products = productRepository.findProductsByCategory(category);
+        List<Product> products = productRepository.findProductsByCategoryId(categoryId);
 
         return ProductConverter.convertToDto(products);
 
+    }
+
+    @Override
+    public List<ProductSimpleDto> findProductsByTagId(Long tagId) {
+        List<Product> products = productRepository.findProductsByTagId(tagId);
+
+        return ProductConverter.convertToDto(products);
     }
 
 }

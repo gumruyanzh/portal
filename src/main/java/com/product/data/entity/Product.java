@@ -24,6 +24,10 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id")
+    private List<Tag> tags;
+
 
     public Product() {}
 
@@ -53,5 +57,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

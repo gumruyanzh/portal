@@ -1,5 +1,7 @@
 package com.product.service.dto;
 
+import java.util.List;
+
 /**
  * Created by zhirayrg on 3/6/2017.
  */
@@ -11,6 +13,8 @@ public class ProductSimpleDto {
     private String name;
 
     private long categoryId;
+
+    private List<Long> tagIds;
 
     public long getId() {
         return id;
@@ -34,5 +38,13 @@ public class ProductSimpleDto {
 
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<Long> getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(List<Long> tagIds) {
+        this.tagIds = tagIds;
     }
 }

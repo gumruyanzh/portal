@@ -29,7 +29,7 @@ public class CategoryResource {
     @GET
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CategorySimpleDto> getProduct() {
+    public List<CategorySimpleDto> getCategories() {
         return categoryService.findAll();
     }
 

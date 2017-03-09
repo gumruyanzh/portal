@@ -9,7 +9,9 @@ import com.product.service.dto.ProductSimpleDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by TCE\zhirayrg on 3/3/17.
@@ -26,7 +28,7 @@ public class ProductResource {
     @GET
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ProductSimpleDto> getProduct() {
+    public List<ProductSimpleDto> getProducts() {
         return productService.findAll();
     }
 
@@ -34,10 +36,13 @@ public class ProductResource {
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ProductSimpleDto createProduct(ProductCreateModel producModel){
+    public ProductSimpleDto createProduct(ProductCreateModel producModel) {
+
         ProductCreateDto productCreateDto = new ProductCreateDto();
         productCreateDto.setName(producModel.getName());
         productCreateDto.setCategoryId(producModel.getCategoryId());
+
+        productCreateDto.setTagIds(Optional.ofNullable(producModel.getTagIds()));
         return productService.create(productCreateDto);
     }
 

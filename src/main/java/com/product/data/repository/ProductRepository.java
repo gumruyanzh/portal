@@ -2,6 +2,7 @@ package com.product.data.repository;
 
 import com.product.data.entity.Category;
 import com.product.data.entity.Product;
+import com.product.data.entity.Tag;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface ProductRepository {
 
     List<Product> findAll();
 
-    List<Product> findProductsByCategory(Category category);
+    List findProductsByCategoryId(Long category);
+
+    List<Product> findProductsByTagId(Long tag);
 
 }

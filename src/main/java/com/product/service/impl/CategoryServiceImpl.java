@@ -36,7 +36,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategorySimpleDto> findAll() {
-
         List<Category> categories = categoryRepository.findAll();
         return CategoryConverter.convertToDto(categories);
     }

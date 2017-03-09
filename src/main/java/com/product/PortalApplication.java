@@ -1,8 +1,10 @@
 package com.product;
 
+import com.product.data.repository.TagRepository;
 import com.product.data.repository.impl.CategoryRepositoryImpl;
 import com.product.data.repository.impl.ProductRepositoryImpl;
 import com.product.data.repository.UserDAO;
+import com.product.data.repository.impl.TagRepositoryImpl;
 import com.product.resources.CategoryResource;
 import com.product.resources.ProductResource;
 import com.product.resources.UserResource;
@@ -68,6 +70,11 @@ public class PortalApplication extends Application<PortalConfiguration> {
                 EntityManager.class,
                 entityManagerBundle.getSharedEntityManager());
 
+        TagRepositoryImpl tagRepository = proxyFactory.create(
+                TagRepositoryImpl.class,
+                EntityManager.class,
+                entityManagerBundle.getSharedEntityManager());
+
         UserDAO userDao = proxyFactory.create(
                 UserDAO.class,
                 EntityManager.class,
@@ -76,8 +83,8 @@ public class PortalApplication extends Application<PortalConfiguration> {
 
 
         environment.jersey().register(new UserResource(userDao));
-        environment.jersey().register(new ProductResource(getProductService(productRepository, categoryRepository)));
-        environment.jersey().register(new CategoryResource(getCategoryService(categoryRepository), getProductService(productRepository, categoryRepository)));
+        environment.jersey().register(new ProductResource(getProductService(productRepository, categoryRepository, tagRepository)));
+        environment.jersey().register(new CategoryResource(getCategoryService(categoryRepository), getProductService(productRepository, categoryRepository, tagRepository)));
 
 
 
@@ -87,8 +94,8 @@ public class PortalApplication extends Application<PortalConfiguration> {
         return new CategoryServiceImpl(categoryRepository);
     }
 
-    private ProductServiceImpl getProductService(ProductRepositoryImpl productRepository, CategoryRepositoryImpl categoryRepository) {
-        return new ProductServiceImpl(productRepository, categoryRepository);
+    private ProductServiceImpl getProductService(ProductRepositoryImpl productRepository, CategoryRepositoryImpl categoryRepository, TagRepository tagRepository) {
+        return new ProductServiceImpl(productRepository, categoryRepository, tagRepository);
     }
 
 }
