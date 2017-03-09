@@ -12,7 +12,7 @@ How to start the portal application
 Try
 ---
 
-To Get all products enter url  `http://localhost:8080/product`
+To Get all products enter url  `http://localhost:8080/products`
 
 
 Health Check
